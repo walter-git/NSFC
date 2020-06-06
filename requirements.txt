@@ -3,5 +3,5 @@ chardet==3.0.4
 idna==2.8
 img2pdf==0.3.3
 Pillow==7.0.0
-requests==2.22.0
+requests==2.23.0
 urllib3==1.25.8

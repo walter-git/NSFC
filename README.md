@@ -2,13 +2,26 @@
 
 帮助你从 [科学基金共享服务网（科技成果信息系统）](http://output.nsfc.gov.cn/) 下载 国自然结题报告，并生成PDF文件的工具。
 
-## 核心思路
+## 声明
 
-1. 通过 `http://output.nsfc.gov.cn/baseQuery/data/conclusionProjectInfo/{ratifyNo}` 接口确定该项目是否存在。
-2. 通过 `while循环` 遍历 `http://output.nsfc.gov.cn/report/{ratifyNo[:2]}/{ratifyNo}_{i}.png` 下载该项目所有PNG，直到请求代码为404（即文件不存在）。
-3. 使用 `img2pdf` 库生成对应PDF文件。
+本项目仅为**科研学习使用**，未使用 国家自然科学基金 等标识进行任何性质的营利行为，
+所有内容信息均来自 [科学基金共享服务网（科技成果信息系统）](http://output.nsfc.gov.cn/) 。
+
+本项目使用MIT开源协议进行授权，对使用本项目造成相关损失的，不承担任何连带法律责任。
 
 ## 使用说明
+
+### 使用GUI
+
+为方便没编程基础的同学使用本脚本，特使用 `tkinter` 和 `pyinstaller` 编译出windows下的可执行程序。请按以下步骤使用：
+
+1. 至 [Release 页面](https://github.com/Rhilip/NSFC_conclusion_downloader/releases) 下载 `nsfc_conclusion_downloader.zip`，并解压。
+2. 运行 `nsfc_downloader.exe`，并输入**申请号信息**，输入完成后点击下载按钮。
+3. 等待软件下载完成，自动打开生成的PDF文件。
+
+![](./resource/gui_usage.png)
+
+### 使用Python脚本
 
 1. 安装 Python3 以及 pip
 2. 下载项目，并安装 Python依赖
@@ -22,7 +35,7 @@
 3. 运行项目，其中 `{ratifyNo}` 替换成你所需要的项目 **批准号**
 
     ```shell script
-    python3 nsfc_downloader.py --ratify '31270544'
+    python3 nsfc_downloader.py --ratify 31270544
     ```
     
     你也可以在其他项目中使用如下示例代码进行批量下载
@@ -30,7 +43,7 @@
     ```python
     from nsfc_downloader import NsfcDownloader
     
-    downloader = NsfcDownloader(tmp_path, out_path)
+    downloader = NsfcDownloader(out_path, tmp_path)
     
     for ratify in ['23456','2345','U12345','2345678']:
         downloader.download(ratify)
@@ -38,15 +51,44 @@
     
 4. 你会在当前目录的 `output`目录中 获得类似 `31270544 生物炭强化石油烃污染土壤生态修复及机理研究.pdf` 的PDF文件
 
+## 核心思路
+
+1. 通过 `http://output.nsfc.gov.cn/baseQuery/data/conclusionProjectInfo/{ratifyNo}` 接口确定该项目是否存在。
+2. 通过 `while循环` 遍历 `http://output.nsfc.gov.cn/report/{ratifyNo[:2]}/{ratifyNo}_{i}.png` 下载该项目所有PNG，直到请求代码为404（即文件不存在）。
+3. 使用 `img2pdf` 库生成对应PDF文件。
+
 ## 命令行使用
 
 ```shell script
-(venv) .\NSFC_conclusion_downloader>python3 nsfc_downloader.py
-usage: nsfc_downloader.py [-h] --ratify RATIFY [--tmp_path TMP_PATH]
-                          [--out_path OUT_PATH]
+(venv) NSFC_conclusion_downloader>python3 nsfc_downloader.py -h
+usage: nsfc_downloader.py [-h] [--version] --ratify RATIFY
+                          [--tmp_path TMP_PATH] [--out_path OUT_PATH]
+                          [--no-debug]
+
+A tool to Download PDF format conclusion from http://output.nsfc.gov.cn/
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --version, -v         show program's version number and exit
+  --ratify RATIFY, -r RATIFY
+                        The ratify id of the project you want to download
+  --tmp_path TMP_PATH, -t TMP_PATH
+                        The path you want to save tmp file
+  --out_path OUT_PATH, -o OUT_PATH
+                        The path you want to save output PDF file
+  --no-debug            Disable The debug mode
 ```
 
-## 其他
+## Pyinstaller 打包
+
+使用以下命令，对项目进行打包，并生成可执行文件。生成文件大小在 11M 左右。~~（因为Pyinstaller打包空项目就能有10.7M）~~
+
+```shell script
+(venv) NSFC_conclusion_downloader>pip install pyinstaller
+(venv) NSFC_conclusion_downloader>pyinstaller gui.py -n nsfc_downloader -Fw
+```
+
+## 其他 （Python脚本适用，GUI情况不生成以下信息）
 
  - 本项目会在 `./tmp` 目录下留下对应项目的原始信息，例如 `./tmp/31270544.json`，你可以使用其他代码进行组合完成整理任务。
  - 原始信息中的 `root.data.projectType` 与展示 项目类别 的关系定义在 `http://output.nsfc.gov.cn/common/data/supportTypeClassOneData` 中，目前关系如下

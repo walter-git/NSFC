@@ -1,2 +1,2 @@
 img2pdf==0.3.6
-requests==2.24.0
+requests==2.25.1

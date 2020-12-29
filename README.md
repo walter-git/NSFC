@@ -59,9 +59,20 @@
 
 ## 核心思路
 
+1. 从用户输入中获得加密后的dependUintID。
+2. 通过 `http://output.nsfc.gov.cn/baseQuery/data/conclusionProjectInfo/{ratifyNo}` 接口确定该项目是否存在。
+3. 通过 `while循环` 请求 `http://output.nsfc.gov.cn/baseQuery/data/completeProjectReport` 接口获得该项目的图片下载链接，直到接口提示下一张图片不存在。
+4. 使用 `img2pdf` 库生成对应PDF文件。
+
+<details><summary>旧版思路</summary>
+<p>
+
 1. 通过 `http://output.nsfc.gov.cn/baseQuery/data/conclusionProjectInfo/{ratifyNo}` 接口确定该项目是否存在。
 2. 通过 `while循环` 遍历 `http://output.nsfc.gov.cn/report/{ratifyNo[:2]}/{ratifyNo}_{i}.png` 下载该项目所有PNG，直到请求代码为404（即文件不存在）。
 3. 使用 `img2pdf` 库生成对应PDF文件。
+
+</p>
+</details>
 
 ## 命令行使用
 

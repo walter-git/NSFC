@@ -7,7 +7,7 @@ import errno
 import img2pdf
 import requests
 
-__VERSION__ = 'v0.1.0'
+__VERSION__ = 'v0.2.0'
 __AUTHOR__ = 'Rhilip'
 
 USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36 Edg/87.0.664.66'
@@ -232,9 +232,3 @@ if __name__ == '__main__':
     args = arg_parser()
     downloader = NsfcDownloader(args.out_path, args.tmp_path)
     downloader.download(args.ratify)
-
-    for ratify in ['23456',
-                   '2345',
-                   'U12345',
-                   '2345678']:
-        downloader.download(ratify)

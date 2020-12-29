@@ -11,15 +11,20 @@
 
 ## 使用说明
 
+> **重要更新**
+> - 2020.12.30: 由于科学基金共享服务网 改版导致不能直接通过申请号进行下载，
+    本项目现使用网址进行下载，请重新阅读使用说明。 （[issue#18](ihttps://github.com/Rhilip/NSFC_conclusion_downloader/issues/18)）
+
 ### 使用GUI
 
 为方便没编程基础的同学使用本脚本，特使用 `tkinter` 和 `pyinstaller` 编译出windows下的可执行程序。请按以下步骤使用：
 
 1. 至 [Release 页面](https://github.com/Rhilip/NSFC_conclusion_downloader/releases) 下载 `nsfc_conclusion_downloader.zip`，并解压。
-2. 运行 `nsfc_downloader.exe`，并输入**申请号信息**，输入完成后点击下载按钮。
-3. 等待软件下载完成，自动打开生成的PDF文件。
-
-![](./resource/gui_usage.png)
+2. 在 [结题项目检索](http://output.nsfc.gov.cn/projectQuery) 页面检索得到对应项目，并复制相关项目网址
+   ![](./resource/copy_url.png)
+3. 运行 `nsfc_downloader.exe`，并输入**项目链接**，输入完成后点击下载按钮。
+   ![](./resource/gui_usage.png)
+4. 等待软件下载完成，自动打开生成的PDF文件。
 
 ### 使用Python脚本
 
@@ -35,7 +40,7 @@
 3. 运行项目，其中 `{ratifyNo}` 替换成你所需要的项目 **批准号**
 
     ```shell script
-    python3 nsfc_downloader.py --ratify 31270544
+    python3 nsfc_downloader.py --ratify http://output.nsfc.gov.cn/conclusionProject/cc63ee32edd56a630ac09226083ebff4
     ```
     
     你也可以在其他项目中使用如下示例代码进行批量下载
@@ -45,7 +50,8 @@
     
     downloader = NsfcDownloader(out_path, tmp_path)
     
-    for ratify in ['23456','2345','U12345','2345678']:
+    for ratify in ['http://output.nsfc.gov.cn/conclusionProject/cc63ee32edd56a630ac09226083ebff4',
+                   'http://output.nsfc.gov.cn/conclusionProject/ed3f850f0fc1db817acb6a51e32d5877']:
         downloader.download(ratify)
     ```
     

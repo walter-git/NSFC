@@ -13,7 +13,7 @@
 
 > **重要更新**
 > - 2020.12.30: 由于科学基金共享服务网 改版导致不能直接通过申请号进行下载，
-    本项目现使用网址进行下载，请重新阅读使用说明。 （[issue#18](ihttps://github.com/Rhilip/NSFC_conclusion_downloader/issues/18)）
+    本项目现使用网址/网站编号进行下载，请重新阅读使用说明。 （[issue#18](ihttps://github.com/Rhilip/NSFC_conclusion_downloader/issues/18)）
 
 ### 使用GUI
 
@@ -37,10 +37,11 @@
     pip install -r requirements.txt
     ```
 
-3. 运行项目，其中 `{ratifyNo}` 替换成你所需要的项目 **批准号**
+3. 运行项目，其中 `{ratifyNo}` 替换成你所需要的项目 **网址** 或 **32位网址编号**
 
     ```shell script
     python3 nsfc_downloader.py --ratify http://output.nsfc.gov.cn/conclusionProject/cc63ee32edd56a630ac09226083ebff4
+    python3 nsfc_downloader.py --ratify cc63ee32edd56a630ac09226083ebff4
     ```
     
     你也可以在其他项目中使用如下示例代码进行批量下载
@@ -50,8 +51,7 @@
     
     downloader = NsfcDownloader(out_path, tmp_path)
     
-    for ratify in ['http://output.nsfc.gov.cn/conclusionProject/cc63ee32edd56a630ac09226083ebff4',
-                   'http://output.nsfc.gov.cn/conclusionProject/ed3f850f0fc1db817acb6a51e32d5877']:
+    for ratify in ['cc63ee32edd56a630ac09226083ebff4', 'ed3f850f0fc1db817acb6a51e32d5877']:
         downloader.download(ratify)
     ```
     
@@ -59,12 +59,12 @@
 
 ## 核心思路
 
-1. 从用户输入中获得加密后的dependUintID。
-2. 通过 `http://output.nsfc.gov.cn/baseQuery/data/conclusionProjectInfo/{ratifyNo}` 接口确定该项目是否存在。
-3. 通过 `while循环` 请求 `http://output.nsfc.gov.cn/baseQuery/data/completeProjectReport` 接口获得该项目的图片下载链接，直到接口提示下一张图片不存在。
+1. 从用户输入中获得加密后的 dependUintID。
+2. 通过 `http://output.nsfc.gov.cn/baseQuery/data/conclusionProjectInfo/{dependUintID}` 接口确定该项目是否存在。
+3. 通过 `while循环` 请求 `http://output.nsfc.gov.cn/baseQuery/data/completeProjectReport` 接口依次获得该项目的图片下载链接，直到接口提示下一张图片不存在。
 4. 使用 `img2pdf` 库生成对应PDF文件。
 
-<details><summary>旧版思路</summary>
+<details><summary>旧版思路（已失效）</summary>
 <p>
 
 1. 通过 `http://output.nsfc.gov.cn/baseQuery/data/conclusionProjectInfo/{ratifyNo}` 接口确定该项目是否存在。

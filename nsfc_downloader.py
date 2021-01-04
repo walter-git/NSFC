@@ -7,7 +7,7 @@ import errno
 import img2pdf
 import requests
 
-__VERSION__ = 'v0.2.0'
+__VERSION__ = 'v0.2.1'
 __AUTHOR__ = 'Rhilip'
 
 USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36 Edg/87.0.664.66'
@@ -86,7 +86,11 @@ class NsfcDownloader:
 
     @staticmethod
     def get_hashed_ratify_from_uri(url) -> str:
-        pat = re.match(r'https?://output\.nsfc\.gov\.cn/conclusionProject/([0-9a-f]{32})', url)
+        # 如果输入的是32位的话，直接跳过，让后续的信息获取函数判断项目编号是否合法
+        if len(url) == 32:
+            return url
+
+        pat = re.match(r'(?:https?://)?output\.nsfc\.gov\.cn/conclusionProject/([0-9a-f]{32})', url)
         if pat:
             return pat.group(1)
 
@@ -219,7 +223,7 @@ class NsfcDownloader:
                     except Exception as e:
                         status['msg'] = '内部错误： {}'.format(e)
         else:
-            status['msg'] = '输入链接格式错误'
+            status['msg'] = '输入链接或项目编号格式错误'
 
         if status['msg']:
             print(status['msg'])

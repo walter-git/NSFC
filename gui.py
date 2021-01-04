@@ -34,16 +34,12 @@ if __name__ == '__main__':
         # 禁用按钮
         input_button.config(state='disabled')
 
-        # 检查申请号信息
-        url = input_ratify.get()
-        if len(url) == 0:
-            tk.messagebox.showerror(title='错误', message='请输入有效的国自然项目链接')
-            return
-
         # 重用 nsfc_downloader
         state.set('开始获取项目信息...')
         nsfc_downloader.clear_state()
 
+        # 获取url并开始下载任务
+        url = input_ratify.get()
         download_thread = threading.Thread(target=nsfc_downloader.download, args=(url,))
         download_thread.start()
 
@@ -58,7 +54,7 @@ if __name__ == '__main__':
                     state.set('已下载完成。')
                     nsfc.open_filepath(download_stats['path'])
                 else:
-                    state.set('下载失败，原因： {}'.format(download_stats['msg']))
+                    state.set('下载失败： {}'.format(download_stats['msg']))
 
                 # 恢复按钮状态
                 input_button.config(state='normal')

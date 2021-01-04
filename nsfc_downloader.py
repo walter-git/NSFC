@@ -191,7 +191,7 @@ class NsfcDownloader:
 
             ratify_info = self.get_ratify_info(ratify)
             if ratify_info.get('code') != 200 or 'data' not in ratify_info:
-                status['msg'] = '项目可能不存在，请重新检查网页 http://output.nsfc.gov.cn/conclusionProject/{} 显示'.format(ratify)
+                status['msg'] = '项目可能不存在，请重新检查项目编号是否正确'
             else:
                 project_name = ratify_info['data'].get('projectName', '')
                 ratify_no = ratify_info['data'].get('ratifyNo', '')
